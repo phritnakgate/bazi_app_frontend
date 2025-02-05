@@ -1,4 +1,4 @@
-import 'package:bazi_app_frontend/screens/welcome.dart';
+import 'package:bazi_app_frontend/screens/welcome_screen.dart';
 import 'package:flutter/material.dart';
 import 'configs/theme.dart';
 
@@ -11,9 +11,6 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: appTheme,
-      home: WelcomeScreen()
-    );
+    return MaterialApp(theme: appTheme, home: WelcomeScreen());
   }
 }
