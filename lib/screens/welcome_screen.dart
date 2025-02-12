@@ -1,6 +1,9 @@
 import 'package:bazi_app_frontend/screens/guesthora_screen.dart';
 import 'package:bazi_app_frontend/widgets/gender_selector_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+
+import '../configs/theme.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
@@ -17,7 +20,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    const Color wColor = Color(0xFFF5E6E8);
+    
 
     return Scaffold(
         backgroundColor: Theme.of(context).primaryColor,
@@ -87,7 +90,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                               pickedDate != DateTime.now()) {
                                             setState(() {
                                               dateController.text =
-                                                  "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}";
+                                                  DateFormat('yyyy-MM-dd')
+                                                      .format(pickedDate);
+                                              debugPrint(dateController.text);
                                             });
                                           }
                                         },
@@ -123,7 +128,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                               timePicked != TimeOfDay.now()) {
                                             setState(() {
                                               timeController.text =
-                                                  "${timePicked.hour}:${timePicked.minute}";
+                                                  "${timePicked.hour.toString().padLeft(2, '0')}:${timePicked.minute.toString().padLeft(2, '0')}:00";
                                             });
                                           }
                                         },
@@ -162,7 +167,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    const GuestHoraScreen()));
+                                                    GuestHoraScreen(
+                                                      name: nameController.text,
+                                                      birthDate:
+                                                          dateController.text,
+                                                      birthTime:
+                                                          timeController.text,
+                                                      gender: selectedGender,
+                                                    )));
                                       },
                                       child: Container(
                                         width:

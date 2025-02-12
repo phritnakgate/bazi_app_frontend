@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 Color fcolor = const Color(0xFF2D4262);
+const Color wColor = Color(0xFFF5E6E8);
 
 final ThemeData appTheme = ThemeData(
   primaryColor: const Color(0xFF862D2D),
