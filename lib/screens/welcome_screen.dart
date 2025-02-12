@@ -20,8 +20,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    
-
     return Scaffold(
         backgroundColor: Theme.of(context).primaryColor,
         body: SafeArea(
@@ -36,10 +34,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 const SizedBox(
                   height: 15,
                 ),
-                const Text(
+                Text(
                   "ยินดีต้อนรับสู่ Bazi Harmony",
-                  style: TextStyle(
-                      color: wColor, fontWeight: FontWeight.bold, fontSize: 20),
+                  style: Theme.of(context)
+                      .textTheme
+                      .headlineMedium!
+                      .copyWith(color: wColor),
                 ),
                 const SizedBox(
                   height: 10,
@@ -52,11 +52,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                         return StatefulBuilder(
                           builder: (context, setDialogState) {
                             return AlertDialog(
-                              title: const Center(
+                              title: Center(
                                   child: Text(
                                 "ใส่ข้อมูลของท่าน",
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold),
+                                style:
+                                    Theme.of(context).textTheme.headlineSmall,
                               )),
                               content: Column(
                                 mainAxisSize: MainAxisSize.min,
@@ -186,10 +186,13 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                                 Theme.of(context).primaryColor,
                                             borderRadius:
                                                 BorderRadius.circular(15)),
-                                        child: const Center(
+                                        child: Center(
                                             child: Text(
                                           "วิเคราะห์พื้นดวง",
-                                          style: TextStyle(color: wColor),
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium!
+                                              .copyWith(color: wColor),
                                         )),
                                       ))
                                 ],
@@ -203,10 +206,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     height: 40,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10), color: wColor),
-                    child: const Center(
+                    child: Center(
                         child: Text(
                       "ผู้เยี่ยมชม",
-                      style: TextStyle(fontSize: 16),
+                      style: Theme.of(context).textTheme.bodyMedium,
                     )),
                   ),
                 )
