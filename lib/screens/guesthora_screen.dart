@@ -1,6 +1,7 @@
 import 'package:bazi_app_frontend/configs/theme.dart';
 import 'package:bazi_app_frontend/models/bazichart_model.dart';
 import 'package:bazi_app_frontend/repositories/fourpillars_repository.dart';
+import 'package:bazi_app_frontend/repositories/hora_repository.dart';
 import 'package:bazi_app_frontend/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
@@ -84,14 +85,15 @@ class _GuestHoraScreenState extends State<GuestHoraScreen> {
         builder: (context, snapshot) {
           // Check the connection state
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const CircularProgressIndicator(); // Show loading spinner while fetching
+            return Center(child: CircularProgressIndicator(color: fcolor));
           } else if (snapshot.hasError) {
-            return Text('Error: ${snapshot.error}'); // Handle error case
+            return Text('Error: ${snapshot.error}');
           } else if (!snapshot.hasData) {
-            return const Text('No data found'); // Handle empty data case
+            return const Text('No data found');
           } else {
             // Display the Bazi chart data
             BaziChart baziChart = snapshot.data!;
+            String element = baziChart.dayPillar.heavenlyStem.name;
             return SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.all(15),
@@ -113,9 +115,12 @@ class _GuestHoraScreenState extends State<GuestHoraScreen> {
                           size: 40,
                         ),
                         const SizedBox(width: 10),
-                        Text(
-                          "${widget.name}, ${displayThaiDate(widget.birthDate)} ${widget.birthTime.substring(0, 5)} น.",
-                          style: Theme.of(context).textTheme.bodyLarge,
+                        Expanded(
+                          child: Text(
+                            "${widget.name}, ${displayThaiDate(widget.birthDate)} ${widget.birthTime.substring(0, 5)} น.",
+                            style: Theme.of(context).textTheme.bodyLarge,
+                            softWrap: true,
+                          ),
                         ),
                       ],
                     ),
@@ -128,7 +133,7 @@ class _GuestHoraScreenState extends State<GuestHoraScreen> {
                             const TextSpan(text: "คุณเป็นคนธาตุ "),
                             TextSpan(
                                 text:
-                                    "${thaiElement[baziChart.dayPillar.heavenlyStem.name.split(" ")[1]]} ${thaiYinyang[baziChart.dayPillar.heavenlyStem.name.split(" ")[0]]}",
+                                    "${thaiElement[element.split(" ")[1]]} ${thaiYinyang[element.split(" ")[0]]}",
                                 style:
                                     Theme.of(context).textTheme.headlineSmall),
                           ],
@@ -141,42 +146,51 @@ class _GuestHoraScreenState extends State<GuestHoraScreen> {
                       "ลักษณะนิสัย",
                       style: Theme.of(context).textTheme.headlineSmall,
                     ),
-                    textContainer(Theme.of(context).textTheme.bodySmall!,
-                        MediaQuery.of(context).size.width * 0.9, 100, "test"),
+                    textContainer(
+                        Theme.of(context).textTheme.bodySmall!,
+                        MediaQuery.of(context).size.width * 0.9,
+                        100,
+                        HoraRepository().getBaseHora(element)[element]["pros"]),
                     const SizedBox(height: 10),
                     Text(
                       "ข้อเสีย",
                       style: Theme.of(context).textTheme.headlineSmall,
                     ),
-                    textContainer(Theme.of(context).textTheme.bodySmall!,
-                        MediaQuery.of(context).size.width * 0.9, 100, "test"),
+                    textContainer(
+                        Theme.of(context).textTheme.bodySmall!,
+                        MediaQuery.of(context).size.width * 0.9,
+                        100,
+                        HoraRepository().getBaseHora(element)[element]["cons"]),
                     const SizedBox(height: 10),
                     Text(
                       "อาชีพที่เหมาะสม",
                       style: Theme.of(context).textTheme.headlineSmall,
                     ),
-                    textContainer(Theme.of(context).textTheme.bodySmall!,
-                        MediaQuery.of(context).size.width * 0.9, 100, "test"),
+                    textContainer(
+                        Theme.of(context).textTheme.bodySmall!,
+                        MediaQuery.of(context).size.width * 0.9,
+                        100,
+                        HoraRepository().getBaseHora(element)["occupation"]),
                     const SizedBox(height: 30),
-                    Center(
-                      child: Container(
-                        width: MediaQuery.of(context).size.width * 0.75,
-                        height: 45,
-                        decoration: BoxDecoration(
-                          color: fcolor,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Center(
-                          child: Text(
-                            "กรุณาเข้าสู่ระบบเพื่อดูข้อมูลเพิ่มเติม",
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium!
-                                .copyWith(color: wColor),
-                          ),
-                        ),
-                      ),
-                    )
+                    // Center(
+                    //   child: Container(
+                    //     width: MediaQuery.of(context).size.width * 0.75,
+                    //     height: 45,
+                    //     decoration: BoxDecoration(
+                    //       color: fcolor,
+                    //       borderRadius: BorderRadius.circular(10),
+                    //     ),
+                    //     child: Center(
+                    //       child: Text(
+                    //         "กรุณาเข้าสู่ระบบเพื่อดูข้อมูลเพิ่มเติม",
+                    //         style: Theme.of(context)
+                    //             .textTheme
+                    //             .bodyMedium!
+                    //             .copyWith(color: wColor),
+                    //       ),
+                    //     ),
+                    //   ),
+                    // )
                   ],
                 ),
               ),

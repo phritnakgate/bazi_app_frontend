@@ -22,6 +22,7 @@ Widget textContainer(
         child: Text(
           text,
           style: tstyle,
+          softWrap: true,
         )),
   );
 }
