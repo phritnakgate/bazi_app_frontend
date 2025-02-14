@@ -1,9 +1,8 @@
 import 'package:bazi_app_frontend/configs/theme.dart';
 import 'package:bazi_app_frontend/models/bazichart_model.dart';
 import 'package:bazi_app_frontend/repositories/fourpillars_repository.dart';
-import 'package:bazi_app_frontend/widgets/four_pillar_table_widget.dart';
+import 'package:bazi_app_frontend/widgets/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class GuestHoraScreen extends StatefulWidget {
   const GuestHoraScreen(
@@ -93,69 +92,93 @@ class _GuestHoraScreenState extends State<GuestHoraScreen> {
           } else {
             // Display the Bazi chart data
             BaziChart baziChart = snapshot.data!;
-            return Padding(
-              padding: const EdgeInsets.all(15),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Center(
-                    child: Text(
-                      "ผลการทำนาย",
-                      style: Theme.of(context).textTheme.headlineMedium,
+            return SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(15),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Center(
+                      child: Text(
+                        "ผลการทำนาย",
+                        style: Theme.of(context).textTheme.headlineMedium,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 10),
-                  Row(
-                    children: [
-                      Icon(
-                        widget.gender == 0 ? Icons.male : Icons.female,
-                        size: 40,
-                      ),
-                      const SizedBox(width: 10),
-                      Text(
-                        "${widget.name}, ${displayThaiDate(widget.birthDate)} ${widget.birthTime.substring(0, 5)} น.",
-                        style: Theme.of(context).textTheme.bodyLarge,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  FourPillarTable(chart: baziChart),
-                  const SizedBox(height: 20),
-                  RichText(
-                    text: TextSpan(
-                      style: Theme.of(context).textTheme.bodyLarge,
+                    const SizedBox(height: 10),
+                    Row(
                       children: [
-                        const TextSpan(text: "คุณเป็นคนธาตุ "),
-                        TextSpan(
-                            text:
-                                "${thaiElement[baziChart.dayPillar.heavenlyStem.name.split(" ")[1]]} ${thaiYinyang[baziChart.dayPillar.heavenlyStem.name.split(" ")[0]]}",
-                            style: Theme.of(context).textTheme.headlineSmall),
+                        Icon(
+                          widget.gender == 0 ? Icons.male : Icons.female,
+                          size: 40,
+                        ),
+                        const SizedBox(width: 10),
+                        Text(
+                          "${widget.name}, ${displayThaiDate(widget.birthDate)} ${widget.birthTime.substring(0, 5)} น.",
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
                       ],
                     ),
-                  ),
-                  const SizedBox(height: 10),
-                  const Text(
-                    "พื้นดวงของ user",
-                  ),
-                  const SizedBox(height: 30),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.8,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: fcolor,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Center(
-                      child: Text(
-                        "กรุณาเข้าสู่ระบบเพื่อดูข้อมูลเพิ่มเติม",
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyMedium!
-                            .copyWith(color: wColor),
+                    const SizedBox(height: 20),
+                    Center(
+                      child: RichText(
+                        text: TextSpan(
+                          style: Theme.of(context).textTheme.bodyLarge,
+                          children: [
+                            const TextSpan(text: "คุณเป็นคนธาตุ "),
+                            TextSpan(
+                                text:
+                                    "${thaiElement[baziChart.dayPillar.heavenlyStem.name.split(" ")[1]]} ${thaiYinyang[baziChart.dayPillar.heavenlyStem.name.split(" ")[0]]}",
+                                style:
+                                    Theme.of(context).textTheme.headlineSmall),
+                          ],
+                        ),
                       ),
                     ),
-                  )
-                ],
+                    FourPillarTable(chart: baziChart),
+                    const SizedBox(height: 30),
+                    Text(
+                      "ลักษณะนิสัย",
+                      style: Theme.of(context).textTheme.headlineSmall,
+                    ),
+                    textContainer(Theme.of(context).textTheme.bodySmall!,
+                        MediaQuery.of(context).size.width * 0.9, 100, "test"),
+                    const SizedBox(height: 10),
+                    Text(
+                      "ข้อเสีย",
+                      style: Theme.of(context).textTheme.headlineSmall,
+                    ),
+                    textContainer(Theme.of(context).textTheme.bodySmall!,
+                        MediaQuery.of(context).size.width * 0.9, 100, "test"),
+                    const SizedBox(height: 10),
+                    Text(
+                      "อาชีพที่เหมาะสม",
+                      style: Theme.of(context).textTheme.headlineSmall,
+                    ),
+                    textContainer(Theme.of(context).textTheme.bodySmall!,
+                        MediaQuery.of(context).size.width * 0.9, 100, "test"),
+                    const SizedBox(height: 30),
+                    Center(
+                      child: Container(
+                        width: MediaQuery.of(context).size.width * 0.75,
+                        height: 45,
+                        decoration: BoxDecoration(
+                          color: fcolor,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Center(
+                          child: Text(
+                            "กรุณาเข้าสู่ระบบเพื่อดูข้อมูลเพิ่มเติม",
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .copyWith(color: wColor),
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
               ),
             );
           }
