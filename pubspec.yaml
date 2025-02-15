@@ -7,10 +7,14 @@ environment:
   sdk: ^3.5.3
 
 dependencies:
+  firebase_auth: ^5.4.2
+  firebase_core: ^3.11.0
   flutter:
     sdk: flutter
   flutter_dotenv: ^5.2.1
   google_fonts: ^6.2.1
+  google_sign_in: ^6.2.2
+  iconify_flutter: ^0.0.7
   intl: ^0.20.2
 
 dev_dependencies:

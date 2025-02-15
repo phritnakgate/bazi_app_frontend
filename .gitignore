@@ -1,6 +1,11 @@
 ### dotenv ###
 .env
 
+# Firebase Services #
+google-services.json
+firebase.json
+firebase_options.dart
+
 # Miscellaneous
 *.class
 *.log
