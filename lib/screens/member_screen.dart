@@ -47,9 +47,14 @@ class _MemberScreenState extends State<MemberScreen> {
             )
           : const Center(child: CircularProgressIndicator()),
       1: CalendarWidget(),
-      2: ProfileWidget(),
+      2: userData != null
+          ? ProfileWidget(
+              userData: userData!,
+            )
+          : const Center(child: CircularProgressIndicator()),
     };
     return Scaffold(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         body: widgetOptions[bottomNavIndex]!,
         bottomNavigationBar: ClipRRect(
           borderRadius: const BorderRadius.only(
