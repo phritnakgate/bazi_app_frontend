@@ -21,4 +21,13 @@ class BaziChart {
       yearPillar: YearPillar.fromJson(json['year_pillar']),
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'hour_pillar': hourPillar.toJson(),
+      'day_pillar': dayPillar.toJson(),
+      'month_pillar': monthPillar.toJson(),
+      'year_pillar': yearPillar.toJson(),
+    };
+  }
 }

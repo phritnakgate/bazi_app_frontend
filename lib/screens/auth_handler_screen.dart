@@ -1,10 +1,7 @@
 import 'package:bazi_app_frontend/screens/authenticated_screen.dart';
-import 'package:bazi_app_frontend/screens/registration_screen.dart';
 import 'package:bazi_app_frontend/screens/welcome_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
-import '../repositories/userdata_repository.dart';
 
 class AuthHandlerScreen extends StatelessWidget {
   const AuthHandlerScreen({super.key});

@@ -1,3 +1,4 @@
+import 'package:bazi_app_frontend/models/user_model.dart';
 import 'package:bazi_app_frontend/repositories/userdata_repository.dart';
 import 'package:bazi_app_frontend/screens/member_screen.dart';
 import 'package:bazi_app_frontend/screens/registration_screen.dart';
@@ -14,6 +15,7 @@ class AuthenticatedScreen extends StatefulWidget {
 
 class _AuthenticatedScreenState extends State<AuthenticatedScreen> {
   bool? isNewUser;
+  UserModel? userData;
 
   @override
   void initState() {
@@ -23,7 +25,6 @@ class _AuthenticatedScreenState extends State<AuthenticatedScreen> {
   }
 
   //Check if user is new or not
-
   Future<void> checkNewUser(String uid) async {
     bool isNew = await UserDataRepository().isFirstTimeUser(uid);
     setState(() {
@@ -37,6 +38,8 @@ class _AuthenticatedScreenState extends State<AuthenticatedScreen> {
     });
   }
 
+  
+
   @override
   Widget build(BuildContext context) {
     if (isNewUser == null) {
@@ -48,7 +51,7 @@ class _AuthenticatedScreenState extends State<AuthenticatedScreen> {
     } else {
       return isNewUser!
           ? RegistrationScreen(onRegistrationComplete: onRegistrationComplete)
-          : const MemberScreen();
+          : MemberScreen();
     }
   }
 }

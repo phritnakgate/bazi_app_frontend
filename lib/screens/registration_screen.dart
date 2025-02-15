@@ -1,7 +1,6 @@
 import 'package:bazi_app_frontend/configs/theme.dart';
 import 'package:bazi_app_frontend/repositories/authentication_repository.dart';
 import 'package:bazi_app_frontend/repositories/userdata_repository.dart';
-import 'package:bazi_app_frontend/screens/authenticated_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -142,7 +141,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   debugPrint(
                       "Name: ${nameController.text}, Date: ${dateController.text}, Time: ${timeController.text}, Gender: $selectedGender");
                   UserDataRepository().registerUser(
-                      FirebaseAuth.instance.currentUser!.uid,
+                      FirebaseAuth.instance.currentUser!,
                       nameController.text,
                       dateController.text,
                       timeController.text,
