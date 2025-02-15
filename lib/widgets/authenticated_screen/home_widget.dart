@@ -26,7 +26,7 @@ class HomeWidget extends StatelessWidget {
               Flexible(
                   flex: 4,
                   child: Text(
-                    "สวัสดี! คุณ ${userData!.displayName}",
+                    "สวัสดี! คุณ ${userData!.email}",
                     softWrap: true,
                     overflow: TextOverflow.ellipsis,
                   )),
