@@ -13,7 +13,7 @@ class AuthHandlerScreen extends StatelessWidget {
       builder: (context, snapshot){
         if(snapshot.connectionState == ConnectionState.active){
           User? user = snapshot.data;
-          return user == null ? const WelcomeScreen() : AuthenticatedScreen(userData: user);
+          return user == null ? const WelcomeScreen() : const AuthenticatedScreen();
         }
         return const Scaffold(
           body: Center(
