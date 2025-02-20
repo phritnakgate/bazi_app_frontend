@@ -17,7 +17,7 @@ class UserDataRepository {
   Future<void> registerUser(User user, String appDisplayName, String birthDate,
       String birthTime, int gender) async {
     BaziChart userBazi =
-        await FourPillarsRepository().getFourPillars("$birthDate $birthTime");
+        await FourPillarsRepository().getFourPillars("$birthDate $birthTime", gender);
     UserModel newUser = UserModel(
       appDisplayName: appDisplayName,
       email: user.email!,

@@ -32,8 +32,8 @@ class _GuestHoraScreenState extends State<GuestHoraScreen> {
   }
 
   Future<BaziChart> getFourPillars() async {
-    return await FourPillarsRepository()
-        .getFourPillars("${widget.birthDate} ${widget.birthTime}");
+    return await FourPillarsRepository().getFourPillars(
+        "${widget.birthDate} ${widget.birthTime}", widget.gender);
   }
 
   // HANDLE DATE DISPLAYING \\
@@ -85,9 +85,18 @@ class _GuestHoraScreenState extends State<GuestHoraScreen> {
         builder: (context, snapshot) {
           // Check the connection state
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator(color: fcolor));
+            return Center(
+                child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CircularProgressIndicator(color: fcolor),
+                const SizedBox(height: 10),
+                Text("กำลังดึงข้อมูล... กรุณารอสักครู่",
+                    style: Theme.of(context).textTheme.bodyMedium),
+              ],
+            ));
           } else if (snapshot.hasError) {
-            return Text('Error: ${snapshot.error}');
+            return Center(child: Text('Error: ${snapshot.error}'));
           } else if (!snapshot.hasData) {
             return const Text('No data found');
           } else {
