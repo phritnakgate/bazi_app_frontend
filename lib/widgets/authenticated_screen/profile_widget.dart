@@ -1,5 +1,6 @@
 import 'package:bazi_app_frontend/configs/theme.dart';
 import 'package:bazi_app_frontend/models/user_model.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../repositories/hora_repository.dart';
@@ -7,9 +8,10 @@ import '../four_pillar_table_widget.dart';
 import '../text_container_widget.dart';
 
 class ProfileWidget extends StatelessWidget {
-  const ProfileWidget({required this.userData, super.key});
+  ProfileWidget({required this.userData, super.key});
 
   final UserModel userData;
+  final currentUser = FirebaseAuth.instance.currentUser;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +38,7 @@ class ProfileWidget extends StatelessWidget {
                   children: [
                     CircleAvatar(
                       radius: 30,
-                      backgroundImage: NetworkImage(userData.imgUrl),
+                      backgroundImage: NetworkImage(currentUser!.photoURL!),
                     ),
                     const SizedBox(height: 5),
                     Text(
@@ -53,13 +55,13 @@ class ProfileWidget extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        Text(userData.appDisplayName,
+                        Text(userData.name,
                             style: Theme.of(context).textTheme.headlineSmall),
                         const SizedBox(width: 5),
                         Icon(userData.gender == 0 ? Icons.male : Icons.female)
                       ],
                     ),
-                    Text("${userData.birthDate} ${userData.birthTime}",
+                    Text(userData.birthDate,
                         style: Theme.of(context).textTheme.bodyMedium),
                     const Spacer(),
                     Align(
@@ -97,7 +99,7 @@ class ProfileWidget extends StatelessWidget {
             ),
             textContainer(
                 Theme.of(context).textTheme.bodySmall!,
-                MediaQuery.of(context).size.width * 0.9,
+                MediaQuery.of(context).size.width * 0.95,
                 100,
                 HoraRepository().getBaseHora(userData
                         .baziChart
@@ -112,7 +114,7 @@ class ProfileWidget extends StatelessWidget {
             ),
             textContainer(
                 Theme.of(context).textTheme.bodySmall!,
-                MediaQuery.of(context).size.width * 0.9,
+                MediaQuery.of(context).size.width * 0.95,
                 100,
                 HoraRepository().getBaseHora(userData
                         .baziChart
@@ -127,7 +129,7 @@ class ProfileWidget extends StatelessWidget {
             ),
             textContainer(
                 Theme.of(context).textTheme.bodySmall!,
-                MediaQuery.of(context).size.width * 0.9,
+                MediaQuery.of(context).size.width * 0.95,
                 100,
                 HoraRepository().getBaseHora(userData
                     .baziChart.dayPillar.heavenlyStem.name)["occupation"]),

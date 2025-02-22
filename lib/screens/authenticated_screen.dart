@@ -2,8 +2,6 @@ import 'package:bazi_app_frontend/models/user_model.dart';
 import 'package:bazi_app_frontend/repositories/userdata_repository.dart';
 import 'package:bazi_app_frontend/screens/member_screen.dart';
 import 'package:bazi_app_frontend/screens/registration_screen.dart';
-
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class AuthenticatedScreen extends StatefulWidget {
@@ -20,13 +18,12 @@ class _AuthenticatedScreenState extends State<AuthenticatedScreen> {
   @override
   void initState() {
     super.initState();
-    final user = FirebaseAuth.instance.currentUser;
-    checkNewUser(user!.uid);
+    checkNewUser();
   }
 
   //Check if user is new or not
-  Future<void> checkNewUser(String uid) async {
-    bool isNew = await UserDataRepository().isFirstTimeUser(uid);
+  Future<void> checkNewUser() async {
+    bool isNew = await UserDataRepository().isFirstTimeUser();
     setState(() {
       isNewUser = isNew;
     });
@@ -51,7 +48,7 @@ class _AuthenticatedScreenState extends State<AuthenticatedScreen> {
     } else {
       return isNewUser!
           ? RegistrationScreen(onRegistrationComplete: onRegistrationComplete)
-          : MemberScreen();
+          : const MemberScreen();
     }
   }
 }

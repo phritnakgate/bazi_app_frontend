@@ -1,6 +1,6 @@
 import 'package:bazi_app_frontend/models/user_model.dart';
+import 'package:bazi_app_frontend/repositories/authentication_repository.dart';
 import 'package:bazi_app_frontend/repositories/userdata_repository.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:bazi_app_frontend/configs/theme.dart';
 import 'package:bazi_app_frontend/widgets/authenticated_screen/authenticated_screen_widgets.dart';
@@ -16,8 +16,8 @@ class _MemberScreenState extends State<MemberScreen> {
   // User Data
   UserModel? userData;
 
-  Future<void> getUserData(String uid) async {
-    UserModel user = await UserDataRepository().getUserData(uid);
+  Future<void> getUserData() async {
+    UserModel user = await UserDataRepository().getUserData();
     setState(() {
       userData = user;
     });
@@ -26,8 +26,7 @@ class _MemberScreenState extends State<MemberScreen> {
   @override
   void initState() {
     super.initState();
-    final user = FirebaseAuth.instance.currentUser;
-    getUserData(user!.uid);
+    getUserData();
   }
 
   // Bottom Navigation Bar
@@ -45,7 +44,14 @@ class _MemberScreenState extends State<MemberScreen> {
           ? HomeWidget(
               userData: userData!,
             )
-          : const Center(child: CircularProgressIndicator()),
+          : Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircularProgressIndicator()
+                ],
+              ),
+            ),
       1: CalendarWidget(),
       2: userData != null
           ? ProfileWidget(

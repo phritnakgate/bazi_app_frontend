@@ -27,7 +27,7 @@ class HomeWidget extends StatelessWidget {
                   width: 10,
                 ),
                 Text(
-                  "สวัสดี! คุณ ${userData.appDisplayName}",
+                  "สวัสดี! คุณ ${userData.name}",
                   softWrap: true,
                   overflow: TextOverflow.ellipsis,
                 ),
