@@ -7,6 +7,7 @@ const Color wColor = Color(0xFFF5E6E8);
 final ThemeData appTheme = ThemeData(
     primaryColor: const Color(0xFF862D2D),
     disabledColor: const Color(0xFFD9D9D9),
+    scaffoldBackgroundColor: const Color(0xFFF5E6E8),
     focusColor: fcolor,
     inputDecorationTheme: InputDecorationTheme(
       border: OutlineInputBorder(

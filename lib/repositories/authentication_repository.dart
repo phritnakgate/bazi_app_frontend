@@ -13,6 +13,7 @@ class AuthenticationRepository {
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
+      
       return await auth.signInWithCredential(credential);
     } catch (e) {
       print(e.toString());

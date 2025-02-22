@@ -9,17 +9,22 @@ class AuthHandlerScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<User?>(
-      stream: FirebaseAuth.instance.authStateChanges(), 
-      builder: (context, snapshot){
-        if(snapshot.connectionState == ConnectionState.active){
+      stream: FirebaseAuth.instance.authStateChanges(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.active) {
           User? user = snapshot.data;
-          return user == null ? const WelcomeScreen() : const AuthenticatedScreen();
+          if (user == null) {
+            return const WelcomeScreen();
+          } else {
+            return const AuthenticatedScreen();
+          }
         }
         return const Scaffold(
           body: Center(
             child: CircularProgressIndicator(),
           ),
         );
-      });
+      },
+    );
   }
 }

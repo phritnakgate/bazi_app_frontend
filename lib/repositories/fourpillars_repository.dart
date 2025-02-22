@@ -8,10 +8,8 @@ class FourPillarsRepository {
   final String? apiUrl = dotenv.env['API_URL'];
 
   //HANDLE FOUR PILLARS CALCULATION
-  Future<BaziChart> getFourPillars(String bdate) async {
-    final payload = jsonEncode({
-      "birth_date": bdate,
-    });
+  Future<BaziChart> getFourPillars(String bdate, int gender) async {
+    final payload = jsonEncode({"birth_date": bdate, "gender": gender});
     final response = await http.post(
       Uri.parse('$apiUrl/bazi_chart/'),
       headers: {"Content-Type": "application/json"},
@@ -19,10 +17,10 @@ class FourPillarsRepository {
     );
     if (response.statusCode != 200) {
       throw Exception('${response.statusCode}: ${response.body}');
-    }else{
-      final Map<String, dynamic> baziChartJson = jsonDecode(utf8.decode(response.bodyBytes));
-      return BaziChart.fromJson(baziChartJson);
+    } else {
+      final Map<String, dynamic> baziChartJson =
+          jsonDecode(utf8.decode(response.bodyBytes));
+      return BaziChart.fromJson(baziChartJson["four_pillars"]);
     }
-    
   }
 }

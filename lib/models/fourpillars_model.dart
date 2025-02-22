@@ -21,6 +21,15 @@ class Branch {
     );
   }
 
+  Map<String, dynamic> toJson() {
+    return {
+      'character': character,
+      'name': name,
+      'spelling': spelling,
+      'value': value,
+    };
+  }
+
 }
 
 //Pillar
@@ -38,6 +47,13 @@ class HourPillar {
       earthlyBranch: Branch.fromJson(json['earthly_branch']),
       heavenlyStem: Branch.fromJson(json['heavenly_stem']),
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'earthly_branch': earthlyBranch.toJson(),
+      'heavenly_stem': heavenlyStem.toJson(),
+    };
   }
 }
 
@@ -59,6 +75,14 @@ class DayPillar {
       heavenlyStem: Branch.fromJson(json['heavenly_stem']),
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'day': day,
+      'earthly_branch': earthlyBranch.toJson(),
+      'heavenly_stem': heavenlyStem.toJson(),
+    };
+  }
 }
 
 class MonthPillar {
@@ -79,6 +103,15 @@ class MonthPillar {
       heavenlyStem: Branch.fromJson(json['heavenly_stem']),
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'month': month,
+      'earthly_branch': earthlyBranch.toJson(),
+      'heavenly_stem': heavenlyStem.toJson(),
+    };
+  }
+
 }
 
 class YearPillar {
@@ -98,5 +131,13 @@ class YearPillar {
       earthlyBranch: Branch.fromJson(json['earthly_branch']),
       heavenlyStem: Branch.fromJson(json['heavenly_stem']),
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'year': year,
+      'earthly_branch': earthlyBranch.toJson(),
+      'heavenly_stem': heavenlyStem.toJson(),
+    };
   }
 }
