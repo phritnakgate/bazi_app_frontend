@@ -1,6 +1,6 @@
 import 'package:bazi_app_frontend/models/user_model.dart';
-import 'package:bazi_app_frontend/repositories/authentication_repository.dart';
 import 'package:bazi_app_frontend/repositories/userdata_repository.dart';
+import 'package:bazi_app_frontend/widgets/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:bazi_app_frontend/configs/theme.dart';
 import 'package:bazi_app_frontend/widgets/authenticated_screen/authenticated_screen_widgets.dart';
@@ -44,20 +44,13 @@ class _MemberScreenState extends State<MemberScreen> {
           ? HomeWidget(
               userData: userData!,
             )
-          : Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CircularProgressIndicator()
-                ],
-              ),
-            ),
+          : loadingWidget(),
       1: CalendarWidget(),
       2: userData != null
           ? ProfileWidget(
               userData: userData!,
             )
-          : const Center(child: CircularProgressIndicator()),
+          : loadingWidget(),
     };
     return Scaffold(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
