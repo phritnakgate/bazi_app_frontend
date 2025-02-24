@@ -29,7 +29,6 @@ class _MemberScreenState extends State<MemberScreen> {
     getUserData();
   }
 
-  // Bottom Navigation Bar
   int bottomNavIndex = 0;
   void onItemTapped(int index) {
     setState(() {

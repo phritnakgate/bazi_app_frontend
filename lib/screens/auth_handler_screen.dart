@@ -3,6 +3,8 @@ import 'package:bazi_app_frontend/screens/welcome_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../widgets/widgets.dart';
+
 class AuthHandlerScreen extends StatelessWidget {
   const AuthHandlerScreen({super.key});
 
@@ -19,9 +21,9 @@ class AuthHandlerScreen extends StatelessWidget {
             return const AuthenticatedScreen();
           }
         }
-        return const Scaffold(
+        return Scaffold(
           body: Center(
-            child: CircularProgressIndicator(),
+            child: loadingWidget(),
           ),
         );
       },
