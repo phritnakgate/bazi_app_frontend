@@ -44,7 +44,7 @@ class _MemberScreenState extends State<MemberScreen> {
               userData: userData!,
             )
           : loadingWidget(),
-      1: CalendarWidget(),
+      1: const CalendarWidget(),
       2: userData != null
           ? ProfileWidget(
               userData: userData!,

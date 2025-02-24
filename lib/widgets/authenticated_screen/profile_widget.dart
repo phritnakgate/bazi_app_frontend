@@ -12,7 +12,7 @@ import '../widgets.dart';
 class ProfileWidget extends StatefulWidget {
   ProfileWidget({required this.userData, super.key});
 
-  final UserModel userData;
+  UserModel userData;
 
   @override
   State<ProfileWidget> createState() => _ProfileWidgetState();
@@ -30,6 +30,12 @@ class _ProfileWidgetState extends State<ProfileWidget> {
     nameController.text = widget.userData.name;
     dateController.text = widget.userData.birthDate.split(" ")[0];
     timeController.text = widget.userData.birthDate.split(" ")[1];
+  }
+
+  void updateUserData(UserModel updatedData) {
+    setState(() {
+      widget.userData = updatedData;
+    });
   }
 
   @override
@@ -229,7 +235,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                                             height: 30,
                                           ),
                                           GestureDetector(
-                                              onTap: () {
+                                              onTap: () async {
                                                 if (nameController.text.isEmpty ||
                                                     dateController
                                                         .text.isEmpty ||
@@ -242,12 +248,16 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                                                   return;
                                                 }
                                                 Navigator.pop(context, true);
-                                                UserDataRepository()
+                                                await UserDataRepository()
                                                     .registerUser(
                                                         nameController.text,
                                                         dateController.text,
                                                         timeController.text,
                                                         selectedGender);
+                                                UserModel updatedData =
+                                                    await UserDataRepository()
+                                                        .getUserData();
+                                                updateUserData(updatedData);
                                               },
                                               child: Container(
                                                 width: MediaQuery.of(context)
