@@ -1,14 +1,58 @@
+import 'dart:math';
+
 import 'package:bazi_app_frontend/configs/theme.dart';
+import 'package:bazi_app_frontend/constants/constants.dart';
 import 'package:bazi_app_frontend/models/user_model.dart';
 import 'package:bazi_app_frontend/repositories/authentication_repository.dart';
+import 'package:bazi_app_frontend/repositories/hora_repository.dart';
+import 'package:bazi_app_frontend/widgets/today_hora_chart_widget.dart';
+
 import 'package:flutter/material.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
-import 'package:iconify_flutter/icons/icomoon_free.dart';
+import 'package:iconify_flutter/icons/uiw.dart';
 
-class HomeWidget extends StatelessWidget {
+class HomeWidget extends StatefulWidget {
   const HomeWidget({required this.userData, super.key});
 
   final UserModel userData;
+
+  @override
+  State<HomeWidget> createState() => _HomeWidgetState();
+}
+
+class _HomeWidgetState extends State<HomeWidget> {
+  Map<String, dynamic> todayHora = {};
+  List<String?> bestTime = [];
+  Map<String, Iconify> dayStatusIcon = {
+    "Good": const Iconify(Uiw.smile, size: 50),
+    "Bad": const Iconify(Uiw.frown, size: 50),
+    "Neutral": const Iconify(Uiw.meh, size: 50)
+  };
+
+  @override
+  void initState() {
+    super.initState();
+    getDailyHora();
+  }
+
+  void getDailyHora() async {
+    final horaToday = await HoraRepository().getDailyHora();
+    List<int> scoreList = List.generate(horaToday["hours"].length, (index) {
+      return horaToday["hours"][index][0] + horaToday["hours"][index][1];
+    });
+    int maxScore = scoreList.reduce(max);
+    List<String?> bestTimeIndex = [];
+    for (int i = 0; i < scoreList.length; i++) {
+      if (scoreList[i] == maxScore) {
+        bestTimeIndex.add(yam[i + 1]);
+      }
+    }
+    print("Today Hora: $horaToday");
+    setState(() {
+      todayHora = horaToday;
+      bestTime = bestTimeIndex;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,17 +63,17 @@ class HomeWidget extends StatelessWidget {
           children: [
             Row(
               children: [
-                const Iconify(
-                  IcomoonFree.happy2,
-                  size: 40,
-                ),
+                todayHora.isEmpty
+                    ? dayStatusIcon["Neutral"]!
+                    : dayStatusIcon[todayHora["status"]]!,
                 const SizedBox(
                   width: 10,
                 ),
                 Text(
-                  "สวัสดี! คุณ ${userData.name}",
+                  "สวัสดี! คุณ ${widget.userData.name}",
                   softWrap: true,
                   overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.bodyLarge,
                 ),
                 const Spacer(),
                 IconButton(
@@ -46,6 +90,51 @@ class HomeWidget extends StatelessWidget {
                     icon: const Icon(Icons.logout)),
               ],
             ),
+            const SizedBox(height: 15),
+            Text("คะแนนประจำวันของคุณ",
+                style: Theme.of(context).textTheme.headlineMedium),
+            const SizedBox(height: 10),
+            Center(
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Theme.of(context).disabledColor,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                width: MediaQuery.of(context).size.width * 0.9,
+                height: 200,
+                child: todayHora.isEmpty
+                    ? const Center(child: Text("กำลังโหลด..."))
+                    : TodayHoraChart(h: todayHora["hours"]),
+              ),
+            ),
+            const SizedBox(height: 5),
+            RichText(
+                text: TextSpan(
+                    style: Theme.of(context).textTheme.bodyMedium,
+                    children: [
+                  const TextSpan(
+                      text: "ช่วงเวลาที่ดีที่สุดสำหรับคุณในวันนี้คือ "),
+                  TextSpan(
+                      text: bestTime.join(", "),
+                      style: const TextStyle(fontWeight: FontWeight.bold)),
+                ])),
+            const SizedBox(height: 15),
+            Row(
+              children: [
+                Text("สีประจำวัน ",
+                    style: Theme.of(context).textTheme.headlineSmall),
+                if (todayHora.containsKey("colors"))
+                  ...((todayHora["colors"] as List)
+                      .map(
+                        (colorName) => Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 4.0), // Adjust spacing
+                          child: colorDisplaying[colorName] ?? const SizedBox(),
+                        ),
+                      )
+                      .toList()),
+              ],
+            )
           ],
         ),
       ),

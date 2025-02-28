@@ -15,6 +15,35 @@ class HoraRepository {
     return baseHoraData[baseElement];
   }
 
+  // GET DAILY HORA DATA \\
+  Future<Map<String, dynamic>> getDailyHora() async {
+    final String? tk = await user.getIdToken();
+    String uri = '$apiUrl/horo_scope/daily';
+    final response = await http.get(
+      Uri.parse(uri),
+      headers: {
+        "Authorization": "$tk",
+        "Content-Type": "application/json",
+      },
+    );
+    final calendarData = await getCalendarData(DateTime.now().month);
+    String todayStatus = "";
+    if (calendarData["goodDate"].contains(DateTime.now().day)) {
+      todayStatus = "Good";
+    } else if (calendarData["badDate"].contains(DateTime.now().day)) {
+      todayStatus = "Bad";
+    } else {
+      todayStatus = "Neutral";
+    }
+    final Map<String, dynamic> todayHoro = {
+      "status": todayStatus,
+      "colors": jsonDecode(response.body)["colors"],
+      "hours": jsonDecode(response.body)["hours"],
+    };
+    //print("Daily Hora API GOT Code: ${response.statusCode}, Body: ${response.body} And Today is $todayStatus");
+    return todayHoro;
+  }
+
   // GET CALENDAR DATA \\
   Future<Map<String, dynamic>> getCalendarData(int month) async {
     final String? tk = await user.getIdToken();
@@ -28,9 +57,22 @@ class HoraRepository {
         "Content-Type": "application/json",
       },
     );
-    final respDate = jsonDecode(response.body);
-    
-    //print("Calendar with $uri API GOT Code: ${response.statusCode}, Body: $respDate");
-    return respDate;
+    if (response.statusCode != 200) {
+      return {};
+    } else {
+      final respDate = jsonDecode(response.body);
+      List<int> goodDate = [];
+      List<int> badDate = [];
+      respDate['good'].forEach((element) {
+        goodDate.add(int.parse(element["date"].split("-")[2]));
+      });
+      respDate['bad'].forEach((element) {
+        badDate.add(int.parse(element["date"].split("-")[2]));
+      });
+      return {
+        "goodDate": goodDate,
+        "badDate": badDate,
+      };
+    }
   }
 }
