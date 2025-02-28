@@ -18,7 +18,7 @@ class _LuckCalendarWidgetState extends State<LuckCalendarWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<String>>(
+    return FutureBuilder<Map<String, dynamic>>(
         future: HoraRepository().getCalendarData(widget.selectedMonth + 1),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -27,9 +27,13 @@ class _LuckCalendarWidgetState extends State<LuckCalendarWidget> {
             );
           } else if (snapshot.hasData) {
             List<int> goodDate = [];
-            for (var i = 0; i < snapshot.data!.length; i++) {
-              goodDate.add(int.parse(snapshot.data![i].split("-")[2]));
-            }
+            List<int> badDate = [];
+            snapshot.data!['good'].forEach((element) {
+              goodDate.add(int.parse(element["date"].split("-")[2]));
+            });
+            snapshot.data!['bad'].forEach((element) {
+              badDate.add(int.parse(element["date"].split("-")[2]));
+            });
             //print("Good Date: $goodDate");
             return Expanded(
               child: TableCalendar(
@@ -55,7 +59,9 @@ class _LuckCalendarWidgetState extends State<LuckCalendarWidget> {
                     decoration: BoxDecoration(
                       color: goodDate.contains(day.day)
                           ? Colors.lightGreen[300]
-                          : Theme.of(context).disabledColor,
+                          : badDate.contains(day.day)
+                              ? Colors.red[300]
+                              : Theme.of(context).disabledColor,
                       shape: BoxShape.circle,
                     ),
                     child: Center(
@@ -69,8 +75,8 @@ class _LuckCalendarWidgetState extends State<LuckCalendarWidget> {
               ),
             );
           } else {
-            return const SizedBox(
-              child: Text("Error"),
+            return SizedBox(
+              child: Text("Error ${snapshot.error}"),
             );
           }
         });

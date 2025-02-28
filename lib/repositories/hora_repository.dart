@@ -16,7 +16,7 @@ class HoraRepository {
   }
 
   // GET CALENDAR DATA \\
-  Future<List<String>> getCalendarData(int month) async {
+  Future<Map<String, dynamic>> getCalendarData(int month) async {
     final String? tk = await user.getIdToken();
     String uri =
         '$apiUrl/horo_scope/calendar?month=$month&year=${DateTime.now().year}';
@@ -29,11 +29,8 @@ class HoraRepository {
       },
     );
     final respDate = jsonDecode(response.body);
-    List<String> returnDate = [];
-    for (var i = 0; i < respDate.length; i++) {
-      returnDate.add(respDate[i]['date']);
-    }
-    //print("Calendar with $uri API GOT Code: ${response.statusCode}, Body: $returnDate");
-    return returnDate;
+    
+    //print("Calendar with $uri API GOT Code: ${response.statusCode}, Body: $respDate");
+    return respDate;
   }
 }

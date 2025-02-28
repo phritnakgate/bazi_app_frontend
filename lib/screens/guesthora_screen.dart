@@ -3,7 +3,6 @@ import 'package:bazi_app_frontend/models/bazichart_model.dart';
 import 'package:bazi_app_frontend/repositories/fourpillars_repository.dart';
 import 'package:bazi_app_frontend/repositories/hora_repository.dart';
 import 'package:bazi_app_frontend/repositories/misc_repository.dart';
-import 'package:bazi_app_frontend/widgets/thai_element_text_widget.dart';
 import 'package:bazi_app_frontend/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
