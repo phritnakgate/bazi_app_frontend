@@ -66,6 +66,9 @@ Map<String, Widget> colorDisplaying = {
   "Purple": colorDisplayContainer(Colors.purple),
   "Orange": colorDisplayContainer(Colors.orange),
   "Pink": colorDisplayContainer(Colors.pink),
+  "Brown": colorDisplayContainer(Colors.brown),
+  "Grey": colorDisplayContainer(Colors.grey),
+  "Gold": colorDisplayContainer(Colors.amber),
   "Black": colorDisplayContainer(Colors.black),
   "White": colorDisplayContainer(Colors.white),
 };

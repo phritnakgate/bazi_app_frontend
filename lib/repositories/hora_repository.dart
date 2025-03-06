@@ -57,6 +57,7 @@ class HoraRepository {
         "Content-Type": "application/json",
       },
     );
+    print("Calendar API GOT Code: ${response.statusCode}, Body: ${response.body}");
     if (response.statusCode != 200) {
       return {};
     } else {
