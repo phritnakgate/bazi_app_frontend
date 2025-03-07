@@ -5,6 +5,7 @@ import 'package:bazi_app_frontend/constants/constants.dart';
 import 'package:bazi_app_frontend/models/user_model.dart';
 import 'package:bazi_app_frontend/repositories/authentication_repository.dart';
 import 'package:bazi_app_frontend/repositories/hora_repository.dart';
+import 'package:bazi_app_frontend/widgets/monthly_prediction_widget.dart';
 import 'package:bazi_app_frontend/widgets/today_hora_chart_widget.dart';
 
 import 'package:flutter/material.dart';
@@ -59,83 +60,137 @@ class _HomeWidgetState extends State<HomeWidget> {
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.all(10.0),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                todayHora.isEmpty
-                    ? dayStatusIcon["Neutral"]!
-                    : dayStatusIcon[todayHora["status"]]!,
-                const SizedBox(
-                  width: 10,
-                ),
-                Text(
-                  "สวัสดี! คุณ ${widget.userData.name}",
-                  softWrap: true,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.bodyLarge,
-                ),
-                const Spacer(),
-                IconButton(
-                    iconSize: 30,
-                    color: wColor,
-                    style: ButtonStyle(
-                        shape: WidgetStatePropertyAll(RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10))),
-                        backgroundColor: WidgetStatePropertyAll(
-                            Theme.of(context).primaryColor)),
-                    onPressed: () async {
-                      await AuthenticationRepository().signOut();
-                    },
-                    icon: const Icon(Icons.logout)),
-              ],
-            ),
-            const SizedBox(height: 15),
-            Text("คะแนนประจำวันของคุณ",
-                style: Theme.of(context).textTheme.headlineMedium),
-            const SizedBox(height: 10),
-            Center(
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Theme.of(context).disabledColor,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                width: MediaQuery.of(context).size.width * 0.9,
-                height: 200,
-                child: todayHora.isEmpty
-                    ? const Center(child: Text("กำลังโหลด..."))
-                    : TodayHoraChart(h: todayHora["hours"]),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  todayHora.isEmpty
+                      ? dayStatusIcon["Neutral"]!
+                      : dayStatusIcon[todayHora["status"]]!,
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    "สวัสดี! คุณ ${widget.userData.name}",
+                    softWrap: true,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                  const Spacer(),
+                  IconButton(
+                      iconSize: 30,
+                      color: wColor,
+                      style: ButtonStyle(
+                          shape: WidgetStatePropertyAll(RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10))),
+                          backgroundColor: WidgetStatePropertyAll(
+                              Theme.of(context).primaryColor)),
+                      onPressed: () async {
+                        await AuthenticationRepository().signOut();
+                      },
+                      icon: const Icon(Icons.logout)),
+                ],
               ),
-            ),
-            const SizedBox(height: 5),
-            RichText(
-                text: TextSpan(
-                    style: Theme.of(context).textTheme.bodyMedium,
-                    children: [
-                  const TextSpan(
-                      text: "ช่วงเวลาที่ดีที่สุดสำหรับคุณในวันนี้คือ "),
-                  TextSpan(
-                      text: bestTime.join(", "),
-                      style: const TextStyle(fontWeight: FontWeight.bold)),
-                ])),
-            const SizedBox(height: 15),
-            Row(
-              children: [
-                Text("สีประจำวัน ",
-                    style: Theme.of(context).textTheme.headlineSmall),
-                if (todayHora.containsKey("colors"))
-                  ...((todayHora["colors"] as List)
-                      .map(
-                        (colorName) => Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 4.0), // Adjust spacing
-                          child: colorDisplaying[colorName] ?? const SizedBox(),
-                        ),
-                      )
-                      .toList()),
-              ],
-            )
-          ],
+              const SizedBox(height: 15),
+              Center(
+                child: Text("คะแนนประจำวันของคุณ",
+                    style: Theme.of(context).textTheme.headlineMedium),
+              ),
+              const SizedBox(height: 10),
+              Center(
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).disabledColor,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  height: 200,
+                  child: todayHora.isEmpty
+                      ? const Center(child: Text("กำลังโหลด..."))
+                      : TodayHoraChart(h: todayHora["hours"]),
+                ),
+              ),
+              const SizedBox(height: 5),
+              RichText(
+                  text: TextSpan(
+                      style: Theme.of(context).textTheme.bodyMedium,
+                      children: [
+                    const TextSpan(
+                        text: "ช่วงเวลาที่ดีที่สุดสำหรับคุณในวันนี้คือ "),
+                    TextSpan(
+                        text: bestTime.join(", "),
+                        style: const TextStyle(fontWeight: FontWeight.bold)),
+                  ])),
+              const SizedBox(height: 15),
+              Row(
+                children: [
+                  Text("สีประจำวัน ",
+                      style: Theme.of(context).textTheme.headlineSmall),
+                  if (todayHora.containsKey("colors"))
+                    ...((todayHora["colors"] as List)
+                        .map(
+                          (colorName) => Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 4.0), // Adjust spacing
+                            child:
+                                colorDisplaying[colorName] ?? const SizedBox(),
+                          ),
+                        )
+                        .toList()),
+                ],
+              ),
+              const SizedBox(height: 20),
+              Text("พยากรณ์ประจำเดือน",
+                  style: Theme.of(context).textTheme.headlineSmall),
+              const SizedBox(height: 10),
+              Text(
+                "สุขภาพ",
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyMedium!
+                    .copyWith(fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 5),
+              MonthlyPredictionWidget(
+                  predText: todayHora["monthlyPrediction"]?["health"] ??
+                      "กำลังโหลด..."),
+              Text(
+                "ความรัก",
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyMedium!
+                    .copyWith(fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 5),
+              MonthlyPredictionWidget(
+                  predText: todayHora["monthlyPrediction"]?["love"] ??
+                      "กำลังโหลด..."),
+              Text(
+                "การเงิน",
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyMedium!
+                    .copyWith(fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 5),
+              MonthlyPredictionWidget(
+                  predText: todayHora["monthlyPrediction"]?["money"] ??
+                      "กำลังโหลด..."),
+              Text(
+                "การงาน",
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyMedium!
+                    .copyWith(fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 5),
+              MonthlyPredictionWidget(
+                  predText: todayHora["monthlyPrediction"]?["work"] ??
+                      "กำลังโหลด..."),
+            ],
+          ),
         ),
       ),
     );

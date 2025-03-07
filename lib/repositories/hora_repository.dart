@@ -7,7 +7,6 @@ import 'package:http/http.dart' as http;
 
 class HoraRepository {
   final String? apiUrl = dotenv.env['API_URL'];
-  final User user = FirebaseAuth.instance.currentUser!;
 
   // GET BASE HORA FROM MODEL \\
   Map<String, dynamic> getBaseHora(String element) {
@@ -17,10 +16,19 @@ class HoraRepository {
 
   // GET DAILY HORA DATA \\
   Future<Map<String, dynamic>> getDailyHora() async {
+    final User user = FirebaseAuth.instance.currentUser!;
     final String? tk = await user.getIdToken();
-    String uri = '$apiUrl/horo_scope/daily';
-    final response = await http.get(
-      Uri.parse(uri),
+    String dailyUri = '$apiUrl/horo_scope/daily';
+    String monthlyUri = '$apiUrl/horo_scope/';
+    final dailyResponse = await http.get(
+      Uri.parse(dailyUri),
+      headers: {
+        "Authorization": "$tk",
+        "Content-Type": "application/json",
+      },
+    );
+    final monthlyResponse = await http.get(
+      Uri.parse(monthlyUri),
       headers: {
         "Authorization": "$tk",
         "Content-Type": "application/json",
@@ -37,15 +45,18 @@ class HoraRepository {
     }
     final Map<String, dynamic> todayHoro = {
       "status": todayStatus,
-      "colors": jsonDecode(response.body)["colors"],
-      "hours": jsonDecode(response.body)["hours"],
+      "colors": jsonDecode(dailyResponse.body)["colors"],
+      "hours": jsonDecode(dailyResponse.body)["hours"],
+      "monthlyPrediction": jsonDecode(monthlyResponse.body),
     };
-    //print("Daily Hora API GOT Code: ${response.statusCode}, Body: ${response.body} And Today is $todayStatus");
+    //print("Daily Hora API GOT Code: ${dailyResponse.statusCode}, Body: ${dailyResponse.body} And Today is $todayStatus");
+    //print("Monthly Hora API GOT Code: ${monthlyResponse.statusCode}, Body: ${jsonDecode(monthlyResponse.body)}");
     return todayHoro;
   }
 
   // GET CALENDAR DATA \\
   Future<Map<String, dynamic>> getCalendarData(int month) async {
+    final User user = FirebaseAuth.instance.currentUser!;
     final String? tk = await user.getIdToken();
     String uri =
         '$apiUrl/horo_scope/calendar?month=$month&year=${DateTime.now().year}';
@@ -57,7 +68,8 @@ class HoraRepository {
         "Content-Type": "application/json",
       },
     );
-    print("Calendar API GOT Code: ${response.statusCode}, Body: ${response.body}");
+    print(
+        "Calendar API GOT Code: ${response.statusCode}, Body: ${response.body}");
     if (response.statusCode != 200) {
       return {};
     } else {
