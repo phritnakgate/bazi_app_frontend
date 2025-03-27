@@ -15,6 +15,7 @@ class FourPillarsRepository {
       headers: {"Content-Type": "application/json"},
       body: payload,
     );
+    print(response.body);
     if (response.statusCode != 200) {
       throw Exception('${response.statusCode}: ${response.body}');
     } else {

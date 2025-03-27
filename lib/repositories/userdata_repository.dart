@@ -27,7 +27,8 @@ class UserDataRepository {
     } else if (response.statusCode == 409) {
       return false;
     } else {
-      throw Exception("Failed to check if user is first time user");
+      FirebaseAuth.instance.signOut();
+      return false;
     }
   }
 
