@@ -23,9 +23,9 @@ class _GenderSelectorWidgetState extends State<GenderSelectorWidget> {
   Widget build(BuildContext context) {
     const Color wColor = Color(0xFFF5E6E8);
     return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       spacing: 10,
       children: [
-        const Text("เพศ"),
         GestureDetector(
           onTap: () => updateGenderSelection(0),
           child: Container(

@@ -7,11 +7,18 @@ environment:
   sdk: ^3.5.3
 
 dependencies:
+  cloud_firestore: ^5.6.3
+  firebase_auth: ^5.4.2
+  firebase_core: ^3.11.0
+  fl_chart: ^0.70.2
   flutter:
     sdk: flutter
   flutter_dotenv: ^5.2.1
   google_fonts: ^6.2.1
+  google_sign_in: ^6.2.2
+  iconify_flutter: ^0.0.7
   intl: ^0.20.2
+  table_calendar: ^3.2.0
 
 dev_dependencies:
   flutter_test:

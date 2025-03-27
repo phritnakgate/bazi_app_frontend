@@ -2,6 +2,7 @@ import 'package:bazi_app_frontend/configs/theme.dart';
 import 'package:bazi_app_frontend/models/bazichart_model.dart';
 import 'package:bazi_app_frontend/repositories/fourpillars_repository.dart';
 import 'package:bazi_app_frontend/repositories/hora_repository.dart';
+import 'package:bazi_app_frontend/repositories/misc_repository.dart';
 import 'package:bazi_app_frontend/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
@@ -27,47 +28,12 @@ class _GuestHoraScreenState extends State<GuestHoraScreen> {
   @override
   void initState() {
     super.initState();
-    // Initialize the Future when the widget is created
     futureBaziChart = getFourPillars();
   }
 
   Future<BaziChart> getFourPillars() async {
-    return await FourPillarsRepository()
-        .getFourPillars("${widget.birthDate} ${widget.birthTime}");
-  }
-
-  // HANDLE DATE DISPLAYING \\
-  Map<String, String> thaiMonth = {
-    "01": "มกราคม",
-    "02": "กุมภาพันธ์",
-    "03": "มีนาคม",
-    "04": "เมษายน",
-    "05": "พฤษภาคม",
-    "06": "มิถุนายน",
-    "07": "กรกฎาคม",
-    "08": "สิงหาคม",
-    "09": "กันยายน",
-    "10": "ตุลาคม",
-    "11": "พฤศจิกายน",
-    "12": "ธันวาคม"
-  };
-
-  // HANDLE THAI ELEMENT DISPLAYING \\
-  Map<String, String> thaiElement = {
-    "Wood": "ไม้",
-    "Fire": "ไฟ",
-    "Earth": "ดิน",
-    "Metal": "ทอง",
-    "Water": "น้ำ"
-  };
-  Map<String, String> thaiYinyang = {
-    "Yin": "หยิน(-)",
-    "Yang": "หยาง(+)",
-  };
-  String displayThaiDate(String bdate) {
-    List<String> date = bdate.split("-");
-    String year = (int.parse(date[0]) + 543).toString();
-    return "${date[2]} ${thaiMonth[date[1]]} $year";
+    return await FourPillarsRepository().getFourPillars(
+        "${widget.birthDate} ${widget.birthTime}", widget.gender);
   }
 
   @override
@@ -85,9 +51,18 @@ class _GuestHoraScreenState extends State<GuestHoraScreen> {
         builder: (context, snapshot) {
           // Check the connection state
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator(color: fcolor));
+            return Center(
+                child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CircularProgressIndicator(color: fcolor),
+                const SizedBox(height: 10),
+                Text("กำลังดึงข้อมูล... กรุณารอสักครู่",
+                    style: Theme.of(context).textTheme.bodyMedium),
+              ],
+            ));
           } else if (snapshot.hasError) {
-            return Text('Error: ${snapshot.error}');
+            return Center(child: Text('Error: ${snapshot.error}'));
           } else if (!snapshot.hasData) {
             return const Text('No data found');
           } else {
@@ -117,7 +92,7 @@ class _GuestHoraScreenState extends State<GuestHoraScreen> {
                         const SizedBox(width: 10),
                         Expanded(
                           child: Text(
-                            "${widget.name}, ${displayThaiDate(widget.birthDate)} ${widget.birthTime.substring(0, 5)} น.",
+                            "${widget.name}, ${MiscRepository().displayThaiDate(widget.birthDate)} ${widget.birthTime.substring(0, 5)} น.",
                             style: Theme.of(context).textTheme.bodyLarge,
                             softWrap: true,
                           ),
@@ -126,19 +101,7 @@ class _GuestHoraScreenState extends State<GuestHoraScreen> {
                     ),
                     const SizedBox(height: 20),
                     Center(
-                      child: RichText(
-                        text: TextSpan(
-                          style: Theme.of(context).textTheme.bodyLarge,
-                          children: [
-                            const TextSpan(text: "คุณเป็นคนธาตุ "),
-                            TextSpan(
-                                text:
-                                    "${thaiElement[element.split(" ")[1]]} ${thaiYinyang[element.split(" ")[0]]}",
-                                style:
-                                    Theme.of(context).textTheme.headlineSmall),
-                          ],
-                        ),
-                      ),
+                      child: personalElementText(context, element)
                     ),
                     FourPillarTable(chart: baziChart),
                     const SizedBox(height: 30),

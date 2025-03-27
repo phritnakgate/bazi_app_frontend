@@ -1,6 +1,9 @@
+import 'package:bazi_app_frontend/repositories/authentication_repository.dart';
 import 'package:bazi_app_frontend/screens/guesthora_screen.dart';
 import 'package:bazi_app_frontend/widgets/gender_selector_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:iconify_flutter/iconify_flutter.dart';
+import 'package:iconify_flutter/icons/grommet_icons.dart';
 import 'package:intl/intl.dart';
 
 import '../configs/theme.dart';
@@ -40,6 +43,32 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       .textTheme
                       .headlineMedium!
                       .copyWith(color: wColor),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    debugPrint("Sign in with Google");
+                    AuthenticationRepository().signInWithGoogle();
+                  },
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 0.7,
+                    height: 40,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10), color: wColor),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Iconify(GrommetIcons.google),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Text("ลงชื่อเข้าใช้ด้วย Google",
+                            style: Theme.of(context).textTheme.bodyMedium),
+                      ],
+                    ),
+                  ),
                 ),
                 const SizedBox(
                   height: 10,
@@ -162,6 +191,15 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                   ),
                                   GestureDetector(
                                       onTap: () {
+                                        if (nameController.text.isEmpty ||
+                                            dateController.text.isEmpty ||
+                                            timeController.text.isEmpty) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(const SnackBar(
+                                                  content: Text(
+                                                      "กรุณากรอกข้อมูลให้ครบถ้วน")));
+                                          return;
+                                        }
                                         Navigator.pop(context);
                                         Navigator.push(
                                             context,
@@ -175,6 +213,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                                           timeController.text,
                                                       gender: selectedGender,
                                                     )));
+                                        
                                       },
                                       child: Container(
                                         width:
