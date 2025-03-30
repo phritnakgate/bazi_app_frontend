@@ -1,13 +1,11 @@
 import 'package:bazi_app_frontend/configs/theme.dart';
 import 'package:bazi_app_frontend/models/user_model.dart';
 import 'package:bazi_app_frontend/repositories/misc_repository.dart';
-import 'package:bazi_app_frontend/repositories/userdata_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-
 import '../../repositories/hora_repository.dart';
 import '../widgets.dart';
+import 'edit_info_widget.dart';
 
 class ProfileWidget extends StatefulWidget {
   ProfileWidget({required this.userData, super.key});
@@ -20,22 +18,11 @@ class ProfileWidget extends StatefulWidget {
 
 class _ProfileWidgetState extends State<ProfileWidget> {
   final currentUser = FirebaseAuth.instance.currentUser;
-  TextEditingController nameController = TextEditingController();
-  TextEditingController dateController = TextEditingController();
-  TextEditingController timeController = TextEditingController();
+  
 
   @override
   void initState() {
     super.initState();
-    nameController.text = widget.userData.name;
-    dateController.text = widget.userData.birthDate.split(" ")[0];
-    timeController.text = widget.userData.birthDate.split(" ")[1];
-  }
-
-  void updateUserData(UserModel updatedData) {
-    setState(() {
-      widget.userData = updatedData;
-    });
   }
 
   @override
@@ -102,190 +89,12 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                           ),
                         ),
                         onPressed: () {
-                          showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                int selectedGender = widget.userData.gender;
-                                return StatefulBuilder(
-                                  builder: (context, setDialogState) {
-                                    return AlertDialog(
-                                      title: Center(
-                                          child: Text(
-                                        "ใส่ข้อมูลของท่าน",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headlineSmall,
-                                      )),
-                                      content: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          SizedBox(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.65,
-                                            child: TextField(
-                                              cursorColor:
-                                                  Theme.of(context).focusColor,
-                                              decoration: const InputDecoration(
-                                                labelText: "ชื่อ",
-                                              ),
-                                              controller: nameController,
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                            height: 15,
-                                          ),
-                                          Row(
-                                            spacing: 10,
-                                            children: [
-                                              GestureDetector(
-                                                onTap: () async {
-                                                  final DateTime? pickedDate =
-                                                      await showDatePicker(
-                                                          context: context,
-                                                          firstDate:
-                                                              DateTime(1900),
-                                                          lastDate:
-                                                              DateTime.now());
-                                                  if (pickedDate != null &&
-                                                      pickedDate !=
-                                                          DateTime.now()) {
-                                                    setState(() {
-                                                      dateController
-                                                          .text = DateFormat(
-                                                              'yyyy-MM-dd')
-                                                          .format(pickedDate);
-                                                      debugPrint(
-                                                          dateController.text);
-                                                    });
-                                                  }
-                                                },
-                                                child: SizedBox(
-                                                  width: MediaQuery.of(context)
-                                                          .size
-                                                          .width *
-                                                      0.3,
-                                                  child: TextField(
-                                                    controller: dateController,
-                                                    enabled: false,
-                                                    decoration:
-                                                        const InputDecoration(
-                                                            labelText:
-                                                                "เลือกวันเกิด"),
-                                                  ),
-                                                ),
-                                              ),
-                                              GestureDetector(
-                                                onTap: () async {
-                                                  final TimeOfDay? timePicked =
-                                                      await showTimePicker(
-                                                          context: context,
-                                                          initialTime:
-                                                              TimeOfDay.now(),
-                                                          builder:
-                                                              (context, child) {
-                                                            return MediaQuery(
-                                                                data: MediaQuery.of(
-                                                                        context)
-                                                                    .copyWith(
-                                                                        alwaysUse24HourFormat:
-                                                                            true),
-                                                                child: child!);
-                                                          });
-                                                  if (timePicked != null &&
-                                                      timePicked !=
-                                                          TimeOfDay.now()) {
-                                                    setState(() {
-                                                      timeController.text =
-                                                          "${timePicked.hour.toString().padLeft(2, '0')}:${timePicked.minute.toString().padLeft(2, '0')}:00";
-                                                    });
-                                                  }
-                                                },
-                                                child: SizedBox(
-                                                  width: MediaQuery.of(context)
-                                                          .size
-                                                          .width *
-                                                      0.3,
-                                                  child: TextField(
-                                                    controller: timeController,
-                                                    enabled: false,
-                                                    decoration:
-                                                        const InputDecoration(
-                                                            labelText:
-                                                                "เลือกเวลาเกิด"),
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          const SizedBox(
-                                            height: 15,
-                                          ),
-                                          GenderSelectorWidget(
-                                            onGenderSelected: (gender) {
-                                              setDialogState(() {
-                                                selectedGender = gender;
-                                              });
-                                            },
-                                          ),
-                                          const SizedBox(
-                                            height: 30,
-                                          ),
-                                          GestureDetector(
-                                              onTap: () async {
-                                                if (nameController.text.isEmpty ||
-                                                    dateController
-                                                        .text.isEmpty ||
-                                                    timeController
-                                                        .text.isEmpty) {
-                                                  ScaffoldMessenger.of(context)
-                                                      .showSnackBar(const SnackBar(
-                                                          content: Text(
-                                                              "กรุณากรอกข้อมูลให้ครบถ้วน")));
-                                                  return;
-                                                }
-                                                Navigator.pop(context, true);
-                                                await UserDataRepository()
-                                                    .registerUser(
-                                                        nameController.text,
-                                                        dateController.text,
-                                                        timeController.text,
-                                                        selectedGender);
-                                                UserModel updatedData =
-                                                    await UserDataRepository()
-                                                        .getUserData();
-                                                updateUserData(updatedData);
-                                              },
-                                              child: Container(
-                                                width: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.75,
-                                                height: 40,
-                                                decoration: BoxDecoration(
-                                                    color: Theme.of(context)
-                                                        .primaryColor,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            15)),
-                                                child: Center(
-                                                    child: Text(
-                                                  "แก้ไขข้อมูล",
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .bodyMedium!
-                                                      .copyWith(color: wColor),
-                                                )),
-                                              ))
-                                        ],
-                                      ),
-                                    );
-                                  },
-                                );
-                              });
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => EditInfoWidget(
+                                    oldData: widget.userData,
+                                  )));
                         },
                         child: Text(
                           "แก้ไขข้อมูล",

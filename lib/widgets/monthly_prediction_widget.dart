@@ -17,9 +17,14 @@ class MonthlyPredictionWidget extends StatelessWidget {
         height: 150,
         child: Padding(
           padding: const EdgeInsets.all(10),
-          child: Text(
-            predText,
-            softWrap: true,
+          child: Scrollbar(
+            trackVisibility: true,
+            child: SingleChildScrollView(
+              child: Text(
+                predText,
+                softWrap: true,
+              ),
+            ),
           ),
         ),
       ),
