@@ -53,8 +53,11 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                   });
                 }),
           ),
+          const SizedBox(height: 10),
+          Text("สีน้ำเงิน = วันปัจจุบัน, สีเขียว = วันดี, สีแดง = วันอริ",
+              style: Theme.of(context).textTheme.bodySmall),
           const SizedBox(height: 20),
-          LuckCalendarWidget(selectedMonth: selectedMonth)
+          LuckCalendarWidget(selectedMonth: selectedMonth),
         ],
       ),
     ));

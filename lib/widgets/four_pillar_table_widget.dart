@@ -74,7 +74,7 @@ Color elementColor(String element) {
   } else if (['earth', 'ox', 'dragon', 'goat', 'dog'].contains(e)) {
     return const Color.fromRGBO(184, 149, 10, 0.5);
   } else if (['metal', 'monkey', 'rooster'].contains(e)) {
-    return Colors.blueGrey;
+    return Colors.grey.shade400;
   } else {
     return Colors.black;
   }
