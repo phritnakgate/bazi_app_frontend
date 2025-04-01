@@ -1,10 +1,10 @@
 import 'package:bazi_app_frontend/configs/theme.dart';
-import 'package:bazi_app_frontend/screens/member_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../models/user_model.dart';
 import '../../repositories/userdata_repository.dart';
+import '../../screens/auth_handler_screen.dart';
 import '../gender_selector_widget.dart';
 
 class EditInfoWidget extends StatefulWidget {
@@ -42,7 +42,7 @@ class _EditInfoWidgetState extends State<EditInfoWidget> {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const MemberScreen(),
+                  builder: (context) => const AuthHandlerScreen(),
                 ),
               );
             },
@@ -162,7 +162,7 @@ class _EditInfoWidgetState extends State<EditInfoWidget> {
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const MemberScreen(),
+                        builder: (context) => const AuthHandlerScreen(),
                       ),
                     );
                     await UserDataRepository().registerUser(
